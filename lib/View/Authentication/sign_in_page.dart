@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pillars/View/Authentication/home_test.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pillars/View/Authentication/forget_password.dart';
 import 'package:pillars/View/Authentication/sign-up-normal-user.dart';
+import 'package:pillars/View/Employee/employee_page.dart';
+import 'package:pillars/View/Welcome/WelcomePage.dart';
+import 'package:pillars/View/admin/admin_page.dart';
+import 'package:pillars/View/home_page.dart';  // Assume this is the normal user home page
 
 class Login extends StatefulWidget {
   @override
@@ -20,10 +26,7 @@ class _LoginScreenState extends State<Login> {
       );
 
       if (userCredential.user != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
+        _navigateToUserHome(userCredential.user!.uid);
       }
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -35,50 +38,149 @@ class _LoginScreenState extends State<Login> {
     }
   }
 
+  Future<void> _navigateToUserHome(String userId) async {
+    try {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+      if (userDoc.exists) {
+        String userType = userDoc['userType'];
+
+        if (userType == 'Admin') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => AdminPage()),
+          );
+        } else if (userType == 'Employee') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => EmployeePage()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to get user type: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Login")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: "Email"),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: "Password"),
-              obscureText: true,
-            ),
-            ElevatedButton(onPressed: _login, child: Text("Log in")),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Row(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              padding: EdgeInsets.all(32.0),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Text("Don't have an account?! "),
+                  Image.asset('assets/logo.png', height: 150),
+                  SizedBox(height: 20.0),
+                  TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(labelText: "Email"),
+                  ),
+                  SizedBox(height: 10.0),
+                  TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(labelText: "Password"),
+                    obscureText: true,
+                  ),
+                  SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: _login,
+                    child: Text("Log in"),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey),
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+                        );
+                      },
+                      child: Text(
+                        "Forgot your password?",
+                        style: TextStyle(color: Colors.blueGrey),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AccountCreationPage()), // Update to your sign-up page widget
+                        MaterialPageRoute(builder: (context) => AccountCreationPage()),
                       );
                     },
-                    child: Text(
-                      'Create account!',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
+                    child: RichText(
+                      text: TextSpan(
+                        text: 'You do not have account? ',
+                        style: TextStyle(color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Create account !',
+                            style: TextStyle(color: Colors.blueGrey),
+                          ),
+                        ],
                       ),
+                      textAlign: TextAlign.center,
                     ),
+                  ),
+                  SizedBox(height: 50.0),
+                  RichText(
+                    text: TextSpan(
+                      text: 'OR',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 10.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      IconButton(
+                        icon: FaIcon(FontAwesomeIcons.facebook, size: 40.0),
+                        color: Colors.blue,
+                        onPressed: () {
+                          // Add your Facebook login logic here
+                        },
+                      ),
+                      SizedBox(width: 10.0),
+                      IconButton(
+                        icon: FaIcon(FontAwesomeIcons.google, size: 40.0),
+                        color: Colors.red,
+                        onPressed: () {
+                          // Add your Google login logic here
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

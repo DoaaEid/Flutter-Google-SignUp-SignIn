@@ -12,6 +12,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final _descriptionController = TextEditingController();
   String? _selectedEmployee;
   List<String> _employeeNames = [];
+  bool _isCompleted = false;
 
   @override
   void initState() {
@@ -36,6 +37,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         'title': _titleController.text,
         'employee': _selectedEmployee,
         'description': _descriptionController.text,
+        'isCompleted': _isCompleted,
         'created_at': Timestamp.now(),
       });
 
@@ -92,7 +94,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   validator: (value) => value == null ? 'Please select an employee' : null,
                 ),
                 SizedBox(height: 25.0),
-
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
@@ -115,13 +116,24 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ),
                 ),
                 SizedBox(height: 20.0),
+                CheckboxListTile(
+                  title: Text('Is Completed'),
+                  value: _isCompleted,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _isCompleted = newValue!;
+                    });
+                  },
+                ),
+                SizedBox(height: 20.0),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: _addTask,
                     child: Text('Add Task', style: TextStyle(fontSize: 15.0)),
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 15.0), backgroundColor: Colors.blueGrey,
+                      padding: EdgeInsets.symmetric(vertical: 15.0),
+                      backgroundColor: Colors.blueGrey,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),

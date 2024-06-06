@@ -5,7 +5,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pillars/View/Authentication/forget_password.dart';
 import 'package:pillars/View/Authentication/sign-up-normal-user.dart';
 import 'package:pillars/View/Employee/employee_page.dart';
+import 'package:pillars/View/Employee/list_task_employee.dart';
 import 'package:pillars/View/Welcome/WelcomePage.dart';
+import 'package:pillars/View/admin/add_task.dart';
+import 'package:pillars/View/admin/add_user.dart';
 import 'package:pillars/View/admin/admin_page.dart';
 import 'package:pillars/View/home_page.dart';  // Assume this is the normal user home page
 
@@ -48,17 +51,17 @@ class _LoginScreenState extends State<Login> {
         if (userType == 'Admin') {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => AdminPage()),
+            MaterialPageRoute(builder: (context) => AddTaskPage()),
           );
         } else if (userType == 'Employee') {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => EmployeePage()),
+            MaterialPageRoute(builder: (context) => HomePageEmployee()),
           );
         } else {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) => Homepage()),
           );
         }
       }

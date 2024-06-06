@@ -7,6 +7,7 @@ import 'package:pillars/View/Employee/list_task_employee.dart';
 import 'package:pillars/View/Welcome/WelcomePage.dart';
 import 'package:pillars/View/admin/add_task.dart';
 import 'package:pillars/View/admin/add_user.dart';
+import 'package:pillars/View/admin/hidden_bottom_navbar.dart';
 import 'package:pillars/View/admin/list_all_user.dart';
 import 'package:pillars/View/home_page.dart';
 
@@ -27,6 +28,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
      // home: AccountCreationPage(), // Use CeramicShopApp here
       home: WelcomePage(),
+     // home: HiddenSideNavBar(),
       theme: ThemeData(primarySwatch: Colors.blue),
       routes: {
      //   '/your-tasks': (context) => YourTasksPage(),

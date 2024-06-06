@@ -10,6 +10,7 @@ import 'package:pillars/View/Welcome/WelcomePage.dart';
 import 'package:pillars/View/admin/add_task.dart';
 import 'package:pillars/View/admin/add_user.dart';
 import 'package:pillars/View/admin/admin_page.dart';
+import 'package:pillars/View/admin/hidden_bottom_navbar.dart';
 import 'package:pillars/View/home_page.dart';  // Assume this is the normal user home page
 
 class Login extends StatefulWidget {
@@ -51,7 +52,7 @@ class _LoginScreenState extends State<Login> {
         if (userType == 'Admin') {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => AddTaskPage()),
+            MaterialPageRoute(builder: (context) => HiddenSideNavBar()),
           );
         } else if (userType == 'Employee') {
           Navigator.pushReplacement(

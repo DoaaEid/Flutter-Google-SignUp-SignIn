@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pillars/View/admin/add_task.dart';
 import 'package:pillars/View/admin/list_all_user.dart';
-import 'package:pillars/View/admin/profile.dart';
+import 'package:pillars/View/admin/list_task.dart';
+import 'package:pillars/View/admin/profile_admin_page.dart';
 
 class HiddenSideNavBar extends StatefulWidget {
   @override
@@ -72,7 +72,7 @@ class _HiddenSideNavBarState extends State<HiddenSideNavBar> with SingleTickerPr
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        'Username',
+                        'Admin',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -89,7 +89,7 @@ class _HiddenSideNavBarState extends State<HiddenSideNavBar> with SingleTickerPr
                     _buildNavItem(
                       icon: Icons.assignment,
                       label: 'List Tasks',
-                      onTap: () => _navigateToPage(context, AddTaskPage()),
+                      onTap: () => _navigateToPage(context, TaskListPage()),
                       fontSize: 16,
                     ),
                     _buildNavItem(
